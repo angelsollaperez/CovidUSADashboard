@@ -11,7 +11,7 @@ h1 {
   text-align: center;
   padding: 1rem;
   border-radius: 12px;
-  background-image: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  background-image: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
   margin: 0 0 2rem 0;
   font-size: 1.5rem;
   color: white;
@@ -34,23 +34,23 @@ p {
 }
 
 .searchbar-container {
-   margin: 0rem;
+  margin: 0rem;
   background: white;
   box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
   border-radius: 12px;
   overflow: hidden;
   padding: 1rem;
-  background-image: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  background-image: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
   transition: all .2s linear;
 }
 
-.boxinfo{
-  margin:0 auto;
-    text-align: center;
+.boxinfo {
+  margin: 0 auto;
+  text-align: center;
 }
 
 select {
-   margin: 0rem;
+  margin: 0rem;
   background: white;
   box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
   border-radius: 130px;
@@ -58,7 +58,7 @@ select {
   top: 30%;
   left: 43%;
   padding: 1rem;
-  background-image: linear-gradient(90deg, rgba(254,255,255,1) 100%, rgba(0,9,75,1) 100%);
+  background-image: linear-gradient(90deg, rgba(254, 255, 255, 1) 100%, rgba(0, 9, 75, 1) 100%);
   transition: all .2s linear;
 }
 
@@ -68,16 +68,16 @@ ul {
   box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
   border-radius: 10px;
   overflow: hidden;
-  list-style-type:none;
+  list-style-type: none;
   top: 30%;
   left: 43%;
   padding: 0rem;
-  background-image: linear-gradient(90deg, rgba(254,255,255,1) 100%, rgba(0,9,75,1) 100%);
+  background-image: linear-gradient(90deg, rgba(254, 255, 255, 1) 100%, rgba(0, 9, 75, 1) 100%);
   transition: all .2s linear;
 }
 
-li{
-  font-size: 0,5rem;
+li {
+  font-size: 0, 5rem;
   color: black;
   font-family: 'Dosis', sans-serif;
   padding: 0.7rem;
@@ -87,4 +87,3 @@ li{
   box-shadow: 2px 8px 45px rgba(0, 0, 0, .15);
   transform: translate3D(0, -2px, 0);
 }
-
