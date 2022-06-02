@@ -4,6 +4,7 @@
 const url_info = 'https://api.covidtracking.com/v1/states/info.json';
 const url_dataset = 'https://api.covidtracking.com/v1/states/current.json';
 const app = document.getElementById('root');
+const divmedio = document.createElement('div');
 
 function onload() {
 
@@ -32,22 +33,57 @@ function onload() {
             }
         })
     const logo = document.createElement('img');
+    divmedio.setAttribute('id', 'divmedio');
+    divmedio.setAttribute('class','divmedio');
+    app.appendChild(divmedio);
     logo.src = 'https://static.vecteezy.com/system/resources/previews/002/640/725/original/account-info-profile-personal-data-icon-vector.jpg';
     logo.setAttribute('id', 'logo');
     logo.setAttribute('width', '150');
-    app.appendChild(logo);
-    const container = document.createElement('div');
-    container.setAttribute('class', 'container');
-    app.appendChild(container);
+    divmedio.appendChild(logo);
+    toptentoday();
+
+}
+
+function toptentoday(){
+  //función para sacar el top TEN de fallecimientos por COVID diarios.
+    clearresults();
+    fetch(url_dataset)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            const h1 = document.createElement('h1');
+            h1.textContent = "TOP 10 estados con más fallecimientos en el día de hoy";
+            divmedio.appendChild(h1);
+
+            let tablatop = document.createElement("ul");
+            tablatop.appendChild(h1);
+            tablatop.setAttribute('id', 'tablatop');
+            tablatop.setAttribute('class', 'tablatop');
+
+            data.sort((a, b) => parseFloat(b.death) - parseFloat(a.death));
+
+            for (let i = 0; i<10; i++) {
+            let estadodeltop = document.createElement("li");
+            estadodeltop.textContent=data[i].death+" "+data[i].state;
+            tablatop.appendChild(estadodeltop);
+              }
+                divmedio.appendChild(tablatop);
+            })
 
 }
 
 function clearresults() {
-    const parent = document.querySelector('#root');
+    const parent = document.querySelector('#boxinfo');
     const keepElem = document.querySelector('#logo');
 
-    [...parent.children]
+    if(parent==null){
+      return;
+    }else{
+        [...parent.children]
     .forEach(child => child !== keepElem ? parent.removeChild(child) : null);
+    }
+  
 }
 
 function comprobarvalor(valor) {
@@ -65,6 +101,7 @@ function rellenodatos(strInput) {
         .then(function(data) {
             const boxinfo = document.createElement('div');
             boxinfo.setAttribute('class', 'boxinfo');
+            boxinfo.setAttribute('id', 'boxinfo');
 
             const h1 = document.createElement('h1');
             let tabladatos = document.createElement("ul");
@@ -81,7 +118,7 @@ function rellenodatos(strInput) {
             //Obtenemos los campos que nos interesan para mostrar sus datos en pantalla.
             for (let i = 0; i < data.length; i++) {
                 if (data[i].state == strInput) {
-                    h1.textContent = str + " (" + data[i].state + ")";
+                    h1.textContent = "Datos de "+str + " (" + data[i].state + ")";
                     h1.setAttribute('class', 'h1estado');
                     muertes.innerText = "Muertes totales: " + comprobarvalor(data[i].death);
                     contagios.innerText = "Contagiados actualmente: " + comprobarvalor(data[i].positive);
