@@ -7,11 +7,6 @@ html {
   background: #F6F6F6;
 }
 
-#root {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 h1 {
   text-align: center;
   padding: 1rem;
@@ -49,13 +44,17 @@ p {
   transition: all .2s linear;
 }
 
-.errorpopup {
+.boxinfo{
+  margin:0 auto;
+    text-align: center;
+}
+
+select {
    margin: 0rem;
   background: white;
   box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
   border-radius: 130px;
   overflow: hidden;
-   position: fixed; /* or absolute */
   top: 30%;
   left: 43%;
   padding: 1rem;
@@ -63,13 +62,25 @@ p {
   transition: all .2s linear;
 }
 
-.card {
-  margin: 1rem;
+ul {
+  margin: 0rem;
   background: white;
   box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
+  list-style-type:none;
+  top: 30%;
+  left: 43%;
+  padding: 0rem;
+  background-image: linear-gradient(90deg, rgba(254,255,255,1) 100%, rgba(0,9,75,1) 100%);
   transition: all .2s linear;
+}
+
+li{
+  font-size: 0,5rem;
+  color: black;
+  font-family: 'Dosis', sans-serif;
+  padding: 0.7rem;
 }
 
 .searchbar-container:hover {
@@ -77,14 +88,3 @@ p {
   transform: translate3D(0, -2px, 0);
 }
 
-@media screen and (min-width: 600px) {
-  .card {
-    flex: 1 1 calc(50% - 2rem);
-  }
-}
-
-@media screen and (min-width: 900px) {
-  .card {
-    flex: 1 1 calc(33% - 2rem);
-  }
-}

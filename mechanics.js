@@ -2,36 +2,36 @@
 //API DE LA INFORMACIÓN DE LOS ESTADOS: https://api.covidtracking.com/v1/states/info.json
 //API DE DATOS DEL COVID DIARIOS DE LOS ESTADOS DE EEUU: https://api.covidtracking.com/v1/states/current.json
 
+const url_info = 'https://api.covidtracking.com/v1/states/info.json';
+const url_dataset = 'https://api.covidtracking.com/v1/states/current.json';
 const app = document.getElementById('root');
 
 function onload(){
-//cargamos los datos básicos en pantalla
 
-  //cargamos la lista de estados.
-   let request = new XMLHttpRequest();
-        request.open('GET', 'https://api.covidtracking.com/v1/states/info.json', true);
-        request.onload = function () {
-          let data = JSON.parse(this.response);
-          const combostates = document.createElement('select');
-          combostates.setAttribute('id', 'combostates');
-          combostates.setAttribute('onchange','rellenodatos(document.getElementById("combostates").value)');
-          let opcioninicial = document.createElement("option");
-          opcioninicial.text="Elige un estado...";
-          opcioninicial.value="Elige un estado...";
-          combostates.appendChild(opcioninicial);
-          document.getElementById("searchbar-container").appendChild(combostates);
-          if (request.status >= 200 && request.status < 400) {
-            data.forEach(data => {       
+          fetch(url_info)
+.then(function (response) {
+    return response.json();
+})
+.then(function (data) {
+    const combostates = document.createElement('select');
+                combostates.setAttribute('id', 'combostates');
+                combostates.setAttribute('onchange','rellenodatos(document.getElementById("combostates").value)');
+                let opcioninicial = document.createElement("option");
+                opcioninicial.text="Elige un estado...";
+                opcioninicial.value="Elige un estado...";
+                combostates.appendChild(opcioninicial);
+                document.getElementById("searchbar-container").appendChild(combostates);
+    for (let i = 0; i < data.length; i++) {
+     //recorremos los datos del JSON
+     let estados = data.results;
+                
               let option = document.createElement("option");
-              option.text = data.name;
-              option.value = data.state;
+              option.text = data[i].name;
+              option.value = data[i].state;
               combostates.appendChild(option);
-            });
-          }
-        }
-
-       request.send();
-
+  
+}
+})
     const logo = document.createElement('img');
     logo.src = 'https://static.vecteezy.com/system/resources/previews/002/640/725/original/account-info-profile-personal-data-icon-vector.jpg';
     logo.setAttribute ('id', 'logo');
@@ -62,60 +62,60 @@ function onload(){
        .forEach(child => child !== keepElem ? parent.removeChild(child) : null);
   }
 
+function comprobarvalor(valor){
+  return (valor === null) ? "No hay datos de hoy" : valor;
+}
+
 function rellenodatos(strInput){
 
       //Borramos los datos del anterior estado del espacio de trabajo.
       clearresults();
-      let request = new XMLHttpRequest();
-      request.open('GET', 'https://api.covidtracking.com/v1/states/current.json', true);
-      request.onload = function () {
-        let data = JSON.parse(this.response);
-        let data2 = JSON.parse(this.response);
-        
-        if (request.status >= 200 && request.status < 400) {
-          data.forEach(data => {
-            if (data.state==strInput){
-              const card = document.createElement('div');
-              card.setAttribute('class', 'card');
+          fetch(url_dataset)
+.then(function (response) {
+    return response.json();
+})
+.then(function (data) {
+              const boxinfo = document.createElement('div');
+              boxinfo.setAttribute('class', 'boxinfo');
+
               const h1 = document.createElement('h1');
+              let tabladatos = document.createElement("ul");
+              tabladatos.setAttribute ('id', 'tabladatos');
+
+              let muertes = document.createElement("li");
+              let contagios = document.createElement("li");
+              let hospitalizados = document.createElement("li");
+              let hospitalizados_actualmente = document.createElement("li");
+              let fechadeactualizacion = document.createElement("li");
               let e = document.getElementById("combostates");
               let str = e.options[e.selectedIndex].text;
-              h1.textContent = str+" ("+data.state+")";
-              const listado = document.createElement("ul");   
+              
                 //Obtenemos los campos que nos interesan para mostrar sus datos en pantalla.
-                let muertes = document.createElement("li");
-                let contagios = document.createElement("li");
-                let hospitalizados = document.createElement("li");
-                let hospitalizados_actualmente = document.createElement("li");
-                let fechadeactualizacion = document.createElement("li");
+                for (let i = 0; i < data.length; i++) {
+                  if(data[i].state==strInput){
+                  h1.textContent = str+" ("+data[i].state+")";
+                  h1.setAttribute ('class', 'h1estado');
+                  muertes.innerText = "Muertes totales: "+comprobarvalor(data[i].death);
+                  contagios.innerText= "Contagiados actualmente: "+comprobarvalor(data[i].positive);
+                  hospitalizados.innerText= "hospitalizados totales: "+comprobarvalor(data[i].hospitalized);
+                  hospitalizados_actualmente.innerText= "hospitalizados actualmente: "+comprobarvalor(data[i].hospitalizedCurrently);
+                  fechadeactualizacion.innerText= "Fecha de actualización de los datos: "+comprobarvalor(data[i].lastUpdateEt);
+                  
+                  tabladatos.appendChild(h1);
+                  tabladatos.appendChild(muertes);
+                  tabladatos.appendChild(contagios);
+                  tabladatos.appendChild(hospitalizados);
+                  tabladatos.appendChild(hospitalizados_actualmente);
+                  tabladatos.appendChild(fechadeactualizacion);
 
-                //voy por aqui, si algún valor es null poner 0 en vez de null **************
-                muertes.innerText = "Muertes totales:"+data.death;
-                contagios.innerText= "Contagiados actualmente: "+data.positive;
-                hospitalizados.innerText= "hospitalizados totales: "+data.hospitalized;
-                hospitalizados_actualmente.innerText= "hospitalizados actualmente: "+data.hospitalizedCurrently;
-                fechadeactualizacion.innerText= "Fecha de actualización de los datos: "+data.lastUpdateEt;
-
-                listado.appendChild(muertes);
-                listado.appendChild(contagios);
-                listado.appendChild(hospitalizados);
-                listado.appendChild(hospitalizados_actualmente);
-                listado.appendChild(fechadeactualizacion);
-
-              app.appendChild(card);
-              app.appendChild(h1);
-              app.appendChild(listado);
-            }
-           
-          });
-        } else {
-          const errorMessage = document.createElement('marquee');
-          errorMessage.textContent = `Gah, it's not working!`;
-          app.appendChild(errorMessage);
-        }
-      }
-
-      request.send();
+                  boxinfo.appendChild(tabladatos);
+                  app.appendChild(boxinfo);
+                  
+                  }
+                  
+                }
+})
+    
 }
     
     
