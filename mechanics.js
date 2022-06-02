@@ -42,17 +42,6 @@ function onload() {
 
 }
 
-const floatingalert = async (strMessage) => {
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-    let newdiv = document.createElement('div');
-    newdiv.id = "errorpopup";
-    newdiv.textContent = strMessage;
-    newdiv.setAttribute('class', 'errorpopup');
-    document.body.appendChild(newdiv);
-    await delay(3000);
-    document.body.removeChild(newdiv);
-}
-
 function clearresults() {
     const parent = document.querySelector('#root');
     const keepElem = document.querySelector('#logo');
