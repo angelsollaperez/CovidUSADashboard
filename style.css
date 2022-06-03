@@ -28,11 +28,6 @@ p {
     margin: 0;
 }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .searchbar-container {
     margin: 0rem;
     background: white;
