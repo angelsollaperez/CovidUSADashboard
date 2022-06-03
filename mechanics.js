@@ -49,7 +49,6 @@ function onload() {
     logo.setAttribute('width', '150');
     divmedio.appendChild(logo);
     toptentoday();
-//falta corregir que no sale el top ten solamente************
 }
 
 function toptentoday(){
