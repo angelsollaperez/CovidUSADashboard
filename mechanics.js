@@ -6,11 +6,21 @@ const url_dataset = 'https://api.covidtracking.com/v1/states/current.json';
 const app = document.getElementById('root');
 const divmedio = document.createElement('div');
 
-function onload() {
+//constructor del objeto estado_seleccionado
+function estadoOBJ (nombre,muertes,contagios,hospitalizados,hospitalizados_actualmente,fechadeactualizacion) {
+    this.nombre = nombre;
+    this.muertes = muertes;
+    this.contagios = contagios;
+    this.hospitalizados = hospitalizados;
+    this.hospitalizados_actualmente = hospitalizados_actualmente;
+    this.fechadeactualizacion = fechadeactualizacion;
+}
 
+function onload() {
     fetch(url_info)
         .then(function(response) {
             return response.json();
+
         })
         .then(function(data) {
             const combostates = document.createElement('select');
@@ -18,13 +28,11 @@ function onload() {
             combostates.setAttribute('onchange', 'rellenodatos(document.getElementById("combostates").value)');
             let opcioninicial = document.createElement("option");
             opcioninicial.text = "Elige un estado...";
-            opcioninicial.value = "Elige un estado...";
             combostates.appendChild(opcioninicial);
             document.getElementById("searchbar-container").appendChild(combostates);
             for (let i = 0; i < data.length; i++) {
                 //recorremos los datos del JSON
                 let estados = data.results;
-
                 let option = document.createElement("option");
                 option.text = data[i].name;
                 option.value = data[i].state;
@@ -41,7 +49,7 @@ function onload() {
     logo.setAttribute('width', '150');
     divmedio.appendChild(logo);
     toptentoday();
-
+//falta corregir que no sale el top ten solamente************
 }
 
 function toptentoday(){
@@ -117,14 +125,18 @@ function rellenodatos(strInput) {
 
             //Obtenemos los campos que nos interesan para mostrar sus datos en pantalla.
             for (let i = 0; i < data.length; i++) {
+
+            //construimos el objeto estado_selectionado
+            var estado_seleccionado = new estadoOBJ(data[i].state, data[i].death,data[i].positive,data[i].hospitalized,data[i].hospitalizedCurrently,data[i].lastUpdateEt);
+
                 if (data[i].state == strInput) {
-                    h1.textContent = "Datos de "+str + " (" + data[i].state + ")";
+                    h1.textContent = "Datos de "+str + " (" + estado_seleccionado.nombre + ")";
                     h1.setAttribute('class', 'h1estado');
-                    muertes.innerText = "Muertes totales: " + comprobarvalor(data[i].death);
-                    contagios.innerText = "Contagiados actualmente: " + comprobarvalor(data[i].positive);
-                    hospitalizados.innerText = "hospitalizados totales: " + comprobarvalor(data[i].hospitalized);
-                    hospitalizados_actualmente.innerText = "hospitalizados actualmente: " + comprobarvalor(data[i].hospitalizedCurrently);
-                    fechadeactualizacion.innerText = "Fecha de actualización de los datos: " + comprobarvalor(data[i].lastUpdateEt);
+                    muertes.innerText = "Muertes totales: " + comprobarvalor(estado_seleccionado.muertes);
+                    contagios.innerText = "Contagiados actualmente: " + comprobarvalor(estado_seleccionado.contagios);
+                    hospitalizados.innerText = "Hospitalizados totales: " + comprobarvalor(estado_seleccionado.hospitalizados);
+                    hospitalizados_actualmente.innerText = "Hospitalizados actualmente: " + comprobarvalor(estado_seleccionado.hospitalizados_actualmente);
+                    fechadeactualizacion.innerText = "Fecha de actualización de los datos: " + comprobarvalor(estado_seleccionado.fechadeactualizacion);
 
                     tabladatos.appendChild(h1);
                     tabladatos.appendChild(muertes);
