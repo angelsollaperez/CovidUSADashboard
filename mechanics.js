@@ -59,11 +59,19 @@ function toptentoday(){
 
             datos_covid.sort((a, b) => parseFloat(b.death) - parseFloat(a.death));
 
-            for (let i = 0; i<10; i++) {
-            let estadodeltop = document.createElement("li");
-            estadodeltop.textContent=datos_covid[i].state+" "+datos_covid[i].death;
-            tablatop.appendChild(estadodeltop);
-              }
+            for (var i = 0; i < datos_covid.length; i++) {
+                for (var j = 0; j < 10; j++) {
+                    if (datos_covid[i].state == datos_estados[j].state) {
+                      let estadodeltop = document.createElement("li");
+                       estadodeltop.textContent=datos_estados[j].name+" "+datos_covid[i].death;
+                       tablatop.appendChild(estadodeltop);
+
+                    }
+                     
+                }
+
+            }
+
             divmedio.appendChild(tablatop);
 
 }
