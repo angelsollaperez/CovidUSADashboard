@@ -43,7 +43,7 @@ function onload() {
 
 function toptentoday(){
   //función para sacar el top TEN de fallecimientos por COVID diarios.
-    clearresults();
+    
     fetch(url_dataset)
         .then(function(response) {
             return response.json();
@@ -71,14 +71,11 @@ function toptentoday(){
 }
 
 function clearresults() {
-    const parent = document.querySelector('#boxinfo');
-    const keepElem = document.querySelector('#logo');
-
-    if(parent==null){
+    let oldresults= document.getElementById('boxinfo');
+    if(oldresults==null){
       return;
     }else{
-        [...parent.children]
-    .forEach(child => child !== keepElem ? parent.removeChild(child) : null);
+      oldresults.remove();
     }
   
 }
