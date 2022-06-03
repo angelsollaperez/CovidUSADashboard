@@ -62,7 +62,7 @@ function toptentoday(){
 
             for (let i = 0; i<10; i++) {
             let estadodeltop = document.createElement("li");
-            estadodeltop.textContent=data[i].death+" "+data[i].state;
+            estadodeltop.textContent=data[i].state+" "+data[i].death;
             tablatop.appendChild(estadodeltop);
               }
                 divmedio.appendChild(tablatop);
