@@ -5,31 +5,35 @@ const url_info = 'https://api.covidtracking.com/v1/states/info.json';
 const url_dataset = 'https://api.covidtracking.com/v1/states/current.json';
 const app = document.getElementById('root');
 const divmedio = document.createElement('div');
+let datos_estados=[];
+let datos_covid=[];
 
-function onload() {
-    fetch(url_info)
-        .then(function(response) {
-            return response.json();
+//método para obtener los datos una vez y no pedirlos constantemente
+async function obtenerDatosAPI(url) {
+  const response = await fetch(url);
+  return response.json();
+}
 
-        })
-        .then(function(data) {
-            const combostates = document.createElement('select');
-            combostates.setAttribute('id', 'combostates');
-            combostates.setAttribute('onchange', 'rellenodatos(document.getElementById("combostates").value)');
-            let opcioninicial = document.createElement("option");
-            opcioninicial.text = "Elige un estado...";
-            combostates.appendChild(opcioninicial);
-            document.getElementById("searchbar-container").appendChild(combostates);
-            for (let i = 0; i < data.length; i++) {
-                //recorremos los datos del JSON
-                let estados = data.results;
-                let option = document.createElement("option");
-                option.text = data[i].name;
-                option.value = data[i].state;
-                combostates.appendChild(option);
+async function onload() {
+//declaramos como variable global los datos para que durante la ejecución no haga falta hacer fetch constantemente.
+datos_estados = await obtenerDatosAPI(url_info); 
+datos_covid = await obtenerDatosAPI(url_dataset);
+const combostates = document.createElement('select');
+combostates.setAttribute('id', 'combostates');
+combostates.setAttribute('onchange', 'rellenodatos(document.getElementById("combostates").value)');
+let opcioninicial = document.createElement("option");
+opcioninicial.text = "Elige un estado...";
+combostates.appendChild(opcioninicial);
+document.getElementById("searchbar-container").appendChild(combostates);
+    
+  for (var i = 0; i < datos_estados.length; i++) { 
+    let option = document.createElement("option");
+    option.text = datos_estados[i].name;
+    option.value = datos_estados[i].state;
+    combostates.appendChild(option);
 
-            }
-        })
+  }
+       
     const logo = document.createElement('img');
     divmedio.setAttribute('id', 'divmedio');
     divmedio.setAttribute('class','divmedio');
@@ -43,12 +47,7 @@ function onload() {
 
 function toptentoday(){
   //función para sacar el top TEN de fallecimientos por COVID diarios.
-    
-    fetch(url_dataset)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
+
             const h1 = document.createElement('h1');
             h1.textContent = "TOP 10 estados con más fallecimientos en el día de hoy";
             divmedio.appendChild(h1);
@@ -58,15 +57,14 @@ function toptentoday(){
             tablatop.setAttribute('id', 'tablatop');
             tablatop.setAttribute('class', 'tablatop');
 
-            data.sort((a, b) => parseFloat(b.death) - parseFloat(a.death));
+            datos_covid.sort((a, b) => parseFloat(b.death) - parseFloat(a.death));
 
             for (let i = 0; i<10; i++) {
             let estadodeltop = document.createElement("li");
-            estadodeltop.textContent=data[i].state+" "+data[i].death;
+            estadodeltop.textContent=datos_covid[i].state+" "+datos_covid[i].death;
             tablatop.appendChild(estadodeltop);
               }
-                divmedio.appendChild(tablatop);
-            })
+            divmedio.appendChild(tablatop);
 
 }
 
@@ -77,7 +75,6 @@ function clearresults() {
     }else{
       oldresults.remove();
     }
-  
 }
 
 function comprobarvalor(valor) {
@@ -86,13 +83,8 @@ function comprobarvalor(valor) {
 
 function rellenodatos(strInput) {
 
-    //Borramos los datos del anterior estado del espacio de trabajo.
-    clearresults();
-    fetch(url_dataset)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
+            //Borramos los datos del anterior estado del espacio de trabajo.
+            clearresults();
             const boxinfo = document.createElement('div');
             boxinfo.setAttribute('class', 'boxinfo');
             boxinfo.setAttribute('id', 'boxinfo');
@@ -110,18 +102,18 @@ function rellenodatos(strInput) {
             let str = e.options[e.selectedIndex].text;
 
             //Obtenemos los campos que nos interesan para mostrar sus datos en pantalla.
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i < datos_covid.length; i++) {
 
             //construimos el objeto estado_selectionado
             let estado_seleccionado = new Map();
-            estado_seleccionado.set("estado",data[i].state);
-            estado_seleccionado.set("muertes",data[i].death);
-            estado_seleccionado.set("contagios",data[i].positive);
-            estado_seleccionado.set("hospitalizados",data[i].hospitalized);
-            estado_seleccionado.set("hospitalizados_actualmente",data[i].hospitalizedCurrently);
-            estado_seleccionado.set("fechadeactualizacion",data[i].lastUpdateEt);
+            estado_seleccionado.set("estado",datos_covid[i].state);
+            estado_seleccionado.set("muertes",datos_covid[i].death);
+            estado_seleccionado.set("contagios",datos_covid[i].positive);
+            estado_seleccionado.set("hospitalizados",datos_covid[i].hospitalized);
+            estado_seleccionado.set("hospitalizados_actualmente",datos_covid[i].hospitalizedCurrently);
+            estado_seleccionado.set("fechadeactualizacion",datos_covid[i].lastUpdateEt);
 
-                if (data[i].state == strInput) {
+                if (datos_covid[i].state == strInput) {
                     h1.textContent = "Datos de "+str + " (" + estado_seleccionado.get("estado") + ")";
                     h1.setAttribute('class', 'h1estado');
                     muertes.innerText = "Muertes totales: " + comprobarvalor(estado_seleccionado.get("muertes"));
@@ -143,6 +135,5 @@ function rellenodatos(strInput) {
                 }
 
             }
-        })
 
 }
