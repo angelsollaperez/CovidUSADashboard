@@ -46,10 +46,10 @@ document.getElementById("searchbar-container").appendChild(combostates);
 }
 
 function toptentoday(){
-  //función para sacar el top TEN de fallecimientos por COVID diarios.
+  //función para sacar el top TEN de fallecimientos por COVID.
 
             const h1 = document.createElement('h1');
-            h1.textContent = "TOP 10 estados con más fallecimientos en el día de hoy";
+            h1.textContent = "TOP 10 estados con más fallecimientos";
             divmedio.appendChild(h1);
 
             let tablatop = document.createElement("ul");
@@ -59,20 +59,13 @@ function toptentoday(){
 
             datos_covid.sort((a, b) => parseFloat(b.death) - parseFloat(a.death));
 
-            for (var i = 0; i < datos_covid.length; i++) {
-                for (var j = 0; j < 10; j++) {
-                    if (datos_covid[i].state == datos_estados[j].state) {
-                      let estadodeltop = document.createElement("li");
-                       estadodeltop.textContent=datos_estados[j].name+" "+datos_covid[i].death;
-                       tablatop.appendChild(estadodeltop);
-
-                    }
-                     
-                }
-
-            }
-
-            divmedio.appendChild(tablatop);
+            for (let i = 0; i<10; i++) {
+            let estadodeltop = document.createElement("li");
+            estadodeltop.textContent=datos_covid[i].state+": "+datos_covid[i].death;
+            tablatop.appendChild(estadodeltop);
+              }
+                divmedio.appendChild(tablatop);
+            
 
 }
 
